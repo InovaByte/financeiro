@@ -1,0 +1,1326 @@
+<html><head><base href="https://unpkg.com/">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Planejador Financeiro</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+:root {
+  --primary: #2c3e50;
+  --secondary: #3498db;
+  --success: #27ae60;
+  --warning: #f1c40f;
+  --danger: #e74c3c;
+  --light: #ecf0f1;
+}
+
+body {
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  margin: 0;
+  padding: 10px;
+  background: var(--light);
+  color: var(--primary);
+  line-height: 1.6;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 10px;
+}
+
+.intro-section {
+  text-align: center;
+  margin-bottom: 30px;
+  padding: 15px;
+  background: var(--secondary);
+  color: white;
+  border-radius: 10px;
+}
+
+.intro-section p {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+h1, h2, h3 {
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.input-help {
+  font-size: 0.9em;
+  color: #666;
+  margin-top: 4px;
+}
+
+input, select {
+  width: calc(100% - 24px);
+  max-width: 100%;
+  padding: 12px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  margin-bottom: 5px;
+  font-size: 16px;
+  transition: border-color 0.3s;
+}
+
+input:focus, select:focus {
+  border-color: var(--secondary);
+  outline: none;
+}
+
+button {
+  background: var(--secondary);
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.2s, background 0.3s;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+button:hover {
+  background: var(--primary);
+  transform: translateY(-2px);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.card {
+  background: white;
+  padding: 25px;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  transition: transform 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.results {
+  margin-top: 40px;
+  padding: 15px;
+  background: var(--light);
+  border-radius: 15px;
+}
+
+.chart-container {
+  margin: 20px 0;
+  height: 300px;
+  background: white;
+  padding: 10px;
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.recommendations {
+  margin-top: 30px;
+  padding: 15px;
+  background: var(--success);
+  color: white;
+  border-radius: 15px;
+}
+
+.tip-card {
+  background: #fff;
+  padding: 15px;
+  margin: 10px 0;
+  border-radius: 8px;
+  border-left: 4px solid var(--secondary);
+}
+
+.investment-breakdown {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.investment-item {
+  background: rgba(255,255,255,0.1);
+  padding: 15px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.educational-section {
+  margin-top: 40px;
+  padding: 20px;
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.module {
+  text-align: center;
+}
+
+.module-btn {
+  margin: 10px 0;
+  width: 100%;
+  max-width: 200px;
+}
+
+.module-display {
+  margin-top: 20px;
+  padding: 20px;
+  background: var(--light);
+  border-radius: 10px;
+}
+
+.calculator-form {
+  display: grid;
+  gap: 15px;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate {
+  animation: fadeIn 0.5s ease-out;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 5px;
+    width: 100%;
+  }
+  
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  
+  input, select {
+    width: 100%;
+    font-size: 16px;
+    padding: 10px;
+  }
+  
+  .intro-section {
+    padding: 15px 10px;
+  }
+  
+  .intro-section h1 {
+    font-size: 24px;
+  }
+  
+  .card {
+    padding: 15px;
+  }
+  
+  .chart-container {
+    height: 250px;
+    margin: 10px 0;
+  }
+  
+  .investment-breakdown {
+    grid-template-columns: 1fr 1fr;
+  }
+  
+  .calculator-form {
+    width: 100%;
+    padding: 10px;
+  }
+  
+  .module-btn {
+    padding: 10px;
+    font-size: 14px;
+  }
+  
+  .tip-card {
+    padding: 12px;
+    font-size: 14px;
+  }
+  
+  .recommendations {
+    padding: 12px;
+  }
+  
+  .recommendations ul {
+    padding-left: 20px;
+  }
+  
+  .module-display {
+    padding: 15px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .investment-breakdown {
+    grid-template-columns: 1fr;
+  }
+  
+  h1 {
+    font-size: 22px;
+  }
+  
+  h2 {
+    font-size: 20px;
+  }
+  
+  h3 {
+    font-size: 18px;
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  .input-help {
+    font-size: 12px;
+  }
+}
+
+.interactive-module {
+  padding: 20px;
+  background: #fff;
+  border-radius: 10px;
+  margin-top: 20px;
+}
+
+.module-progress {
+  margin-bottom: 20px;
+}
+
+.progress-bar {
+  background: #eee;
+  height: 10px;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.progress {
+  background: var(--success);
+  height: 100%;
+  width: 0;
+  transition: width 0.3s ease;
+}
+
+.interactive-box {
+  margin: 20px 0;
+}
+
+.reveal-btn {
+  width: 100%;
+  margin: 10px 0;
+  background: var(--secondary);
+}
+
+.hidden-content {
+  display: none;
+}
+
+.hidden-content.animate {
+  display: block;
+  animation: slideDown 0.3s ease;
+}
+
+.quiz-section {
+  margin: 20px 0;
+  padding: 15px;
+  background: var(--light);
+  border-radius: 8px;
+}
+
+.quiz-options {
+  display: grid;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.quiz-btn {
+  background: white;
+  color: var(--primary);
+  border: 2px solid var(--secondary);
+}
+
+.quiz-btn.correct {
+  background: var(--success);
+  color: white;
+}
+
+.quiz-btn.incorrect {
+  background: var(--danger);
+  color: white;
+}
+
+.budget-breakdown {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.budget-item {
+  padding: 15px;
+  background: var(--light);
+  border-radius: 8px;
+  text-align: center;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 768px) {
+  .budget-breakdown {
+    grid-template-columns: 1fr;
+  }
+  
+  .interactive-module {
+    padding: 15px;
+  }
+  
+  .quiz-options {
+    grid-template-columns: 1fr;
+  }
+}
+
+.content-box {
+  background: #fff;
+  padding: 15px;
+  border-radius: 8px;
+  margin: 10px 0;
+  transition: all 0.3s ease;
+}
+
+.content-box.hidden {
+  display: none;
+}
+
+.mark-complete {
+  margin-top: 10px;
+  background: var(--success);
+}
+
+.mark-complete[disabled] {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.module-navigation {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.nav-btn {
+  padding: 10px 20px;
+  background: var(--secondary);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.nav-btn[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.completion-message {
+  text-align: center;
+  padding: 20px;
+  background: var(--success);
+  color: white;
+  border-radius: 8px;
+  margin-top: 20px;
+}
+
+.reset-btn {
+  background: white;
+  color: var(--success);
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  margin-top: 10px;
+  cursor: pointer;
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="intro-section">
+    <h1>Planejador Financeiro Pessoal</h1>
+    <p>Organize suas finanças, defina objetivos e receba um plano personalizado para alcançar seus sonhos financeiros.</p>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <h2>💼 Dados Financeiros Básicos</h2>
+      <div class="form-group">
+        <label for="idade">Idade</label>
+        <input type="number" id="idade" min="18" max="100" placeholder="Ex: 30">
+        <div class="input-help">Sua idade atual em anos</div>
+        
+        <label for="renda">Renda Mensal (R$)</label>
+        <input type="number" id="renda" min="0" placeholder="Ex: 5000">
+        <div class="input-help">Soma de todos os seus rendimentos mensais</div>
+        
+        <label for="despesas">Despesas Mensais (R$)</label>
+        <input type="number" id="despesas" min="0" placeholder="Ex: 3000">
+        <div class="input-help">Total de gastos mensais incluindo contas fixas e variáveis</div>
+      </div>
+    </div>
+    
+    <div class="card">
+      <h2>🎯 Objetivos Financeiros</h2>
+      <div class="form-group">
+        <label for="objetivo">Objetivo Principal</label>
+        <select id="objetivo">
+          <option value="casa">Comprar uma Casa</option>
+          <option value="aposentadoria">Aposentadoria</option>
+          <option value="emergencia">Fundo de Emergência</option>
+          <option value="investimento">Investimentos</option>
+          <option value="educacao">Educação</option>
+          <option value="viagem">Viagem</option>
+        </select>
+        <div class="input-help">Escolha seu principal objetivo financeiro</div>
+        
+        <label for="valor-objetivo">Valor do Objetivo (R$)</label>
+        <input type="number" id="valor-objetivo" min="0" placeholder="Ex: 200000">
+        <div class="input-help">Quanto você precisa para atingir seu objetivo</div>
+        
+        <label for="prazo">Prazo (anos)</label>
+        <input type="number" id="prazo" min="1" max="50" placeholder="Ex: 10">
+        <div class="input-help">Em quantos anos você planeja atingir este objetivo</div>
+      </div>
+    </div>
+  </div>
+  
+  <div style="text-align: center; margin-top: 30px;">
+    <button onclick="calcularPlanejamento()">Calcular Meu Plano Financeiro</button>
+  </div>
+  
+  <div class="results" id="results" style="display: none;">
+    <h2>📊 Análise Financeira Detalhada</h2>
+    
+    <div class="tip-card" id="summary"></div>
+    
+    <div class="chart-container">
+      <canvas id="financialChart"></canvas>
+    </div>
+    
+    <div class="recommendations" id="recommendations"></div>
+  </div>
+
+  <div class="educational-section" id="educational-section">
+    <h2>📚 Academia Financeira</h2>
+    
+    <div class="learning-modules grid">
+      <div class="card module">
+        <h3>Fundamentos de Investimentos</h3>
+        <div class="module-content">
+          <button onclick="showModule('investments')" class="module-btn">Começar</button>
+        </div>
+      </div>
+      
+      <div class="card module">
+        <h3>Técnicas de Economia</h3>
+        <div class="module-content">
+          <button onclick="showModule('savings')" class="module-btn">Começar</button>
+        </div>
+      </div>
+      
+      <div class="card module">
+        <h3>Calculadoras de Investimento</h3>
+        <div class="module-content">
+          <select id="calc-type" onchange="showCalculator(this.value)">
+            <option value="">Selecione uma calculadora...</option>
+            <option value="compound">Juros Compostos</option>
+            <option value="retirement">Aposentadoria</option>
+            <option value="savings">Poupança</option>
+          </select>
+          <div id="calculator-container"></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="module-content" class="module-display" style="display:none">
+    </div>
+  </div>
+</div>
+
+<script>
+let financialChart = null;
+
+function calcularPlanejamento() {
+    const idade = Number(document.getElementById('idade').value);
+    const renda = Number(document.getElementById('renda').value);
+    const despesas = Number(document.getElementById('despesas').value);
+    const objetivo = document.getElementById('objetivo').value;
+    const valorObjetivo = Number(document.getElementById('valor-objetivo').value);
+    const prazo = Number(document.getElementById('prazo').value);
+    
+    if (!idade || !renda || !despesas || !valorObjetivo || !prazo) {
+        alert('Por favor, preencha todos os campos com valores válidos!');
+        return;
+    }
+    
+    const sobra = renda - despesas;
+    const valorMensal = valorObjetivo / (prazo * 12);
+    const percentualComprometido = (valorMensal / sobra) * 100;
+    const viabilidade = sobra >= valorMensal;
+    
+    document.getElementById('results').style.display = 'block';
+    document.getElementById('results').classList.add('animate');
+    
+    document.getElementById('summary').innerHTML = `
+        <h3>Resumo Financeiro Mensal</h3>
+        <p>💰 Renda: R$ ${renda.toFixed(2)}</p>
+        <p>📉 Despesas: R$ ${despesas.toFixed(2)}</p>
+        <p>💫 Sobra: R$ ${sobra.toFixed(2)}</p>
+        <p>🎯 Valor necessário mensal: R$ ${valorMensal.toFixed(2)} (${percentualComprometido.toFixed(1)}% da sobra mensal)</p>
+    `;
+    
+    let recomendacoes = '';
+    if (viabilidade) {
+        const investimentos = gerarDistribuicaoInvestimentos(objetivo);
+        recomendacoes = `
+            <h3>🌟 Recomendações Personalizadas</h3>
+            <p>✅ Seu objetivo é viável! Continue assim!</p>
+            
+            <div class="investment-breakdown">
+                ${Object.entries(investimentos).map(([tipo, valor]) => `
+                    <div class="investment-item">
+                        <h4>${tipo}</h4>
+                        <p>${valor}%</p>
+                    </div>
+                `).join('')}
+            </div>
+            
+            <h4 style="margin-top: 20px;">💡 Dicas para otimizar seu plano:</h4>
+            <ul>
+                <li>Considere uma reserva de emergência de 6 meses de despesas</li>
+                <li>Diversifique seus investimentos para reduzir riscos</li>
+                <li>Revise seu plano a cada 6 meses</li>
+            </ul>
+        `;
+    } else {
+        recomendacoes = `
+            <h3>⚠️ Ajustes Necessários</h3>
+            <p>Para atingir seu objetivo, considere estas opções:</p>
+            <ul>
+                <li>Reduzir despesas em R$ ${(valorMensal - sobra).toFixed(2)} mensais</li>
+                <li>Aumentar o prazo para ${Math.ceil(valorObjetivo / (sobra * 12))} anos</li>
+                <li>Buscar renda extra através de trabalhos freelance ou hora extra</li>
+                <li>Renegociar dívidas e buscar melhores taxas</li>
+            </ul>
+        `;
+    }
+    
+    document.getElementById('recommendations').innerHTML = recomendacoes;
+    
+    atualizarGrafico(prazo, sobra, valorMensal);
+}
+
+function gerarDistribuicaoInvestimentos(objetivo) {
+    const distribuicoes = {
+        casa: {
+            'Renda Fixa': 50,
+            'Tesouro Direto': 30,
+            'Emergência': 20
+        },
+        aposentadoria: {
+            'Renda Variável': 40,
+            'Tesouro IPCA+': 40,
+            'Renda Fixa': 20
+        },
+        emergencia: {
+            'Poupança': 40,
+            'CDB': 40,
+            'Tesouro Selic': 20
+        },
+        investimento: {
+            'Ações': 40,
+            'Fundos': 30,
+            'Renda Fixa': 30
+        },
+        educacao: {
+            'Tesouro Direto': 50,
+            'CDB': 30,
+            'Emergência': 20
+        },
+        viagem: {
+            'CDB': 60,
+            'Poupança': 20,
+            'Tesouro Direto': 20
+        }
+    };
+    
+    return distribuicoes[objetivo] || distribuicoes['investimento'];
+}
+
+function atualizarGrafico(prazo, sobra, valorMensal) {
+    const ctx = document.getElementById('financialChart').getContext('2d');
+    
+    if (financialChart) {
+        financialChart.destroy();
+    }
+    
+    const labels = Array.from({length: prazo + 1}, (_, i) => `Ano ${i}`);
+    const dadosEconomia = Array.from({length: prazo + 1}, (_, i) => {
+        const valorBase = i * sobra * 12;
+        const rendimento = valorBase * 0.06;
+        return valorBase + rendimento;
+    });
+    const dadosObjetivo = Array.from({length: prazo + 1}, (_, i) => i * valorMensal * 12);
+    
+    const options = {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            title: {
+                display: true,
+                text: 'Projeção Financeira ao Longo do Tempo',
+                font: {
+                    size: window.innerWidth < 768 ? 14 : 16
+                }
+            },
+            legend: {
+                position: window.innerWidth < 480 ? 'top' : 'bottom',
+                labels: {
+                    boxWidth: window.innerWidth < 480 ? 8 : 40,
+                    font: {
+                        size: window.innerWidth < 480 ? 10 : 12
+                    },
+                    padding: window.innerWidth < 768 ? 10 : 20
+                }
+            }
+        },
+        scales: {
+            y: {
+                beginAtZero: true,
+                title: {
+                    display: true,
+                    text: 'Valor Acumulado (R$)',
+                    font: {
+                        size: window.innerWidth < 768 ? 12 : 14
+                    }
+                },
+                ticks: {
+                    font: {
+                        size: window.innerWidth < 480 ? 10 : 12
+                    }
+                }
+            },
+            x: {
+                ticks: {
+                    font: {
+                        size: window.innerWidth < 480 ? 10 : 12
+                    },
+                    maxRotation: 45,
+                    minRotation: 45
+                }
+            }
+        }
+    };
+
+    financialChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Economia Projetada + Rendimentos',
+                data: dadosEconomia,
+                borderColor: '#27ae60',
+                backgroundColor: 'rgba(39, 174, 96, 0.1)',
+                fill: true,
+                tension: 0.4
+            }, {
+                label: 'Meta Necessária',
+                data: dadosObjetivo,
+                borderColor: '#e74c3c',
+                borderDash: [5, 5],
+                tension: 0.4
+            }]
+        },
+        options: options
+    });
+}
+
+function showModule(type) {
+  const content = {
+    investments: {
+      title: 'Fundamentos de Investimentos',
+      content: `
+        <div class="interactive-module">
+          <div class="module-progress">
+            <div class="progress-bar">
+              <div class="progress" id="progress-bar"></div>
+            </div>
+            <p class="progress-text">0% Completo</p>
+          </div>
+          
+          <div class="module-sections">
+            <section class="section" data-section="1">
+              <h3>1. Introdução ao Mercado Financeiro</h3>
+              <div class="interactive-box">
+                <button class="reveal-btn" onclick="toggleContent(this, 'mercado-financeiro')">
+                  O que é o Mercado Financeiro?
+                </button>
+                <div id="mercado-financeiro" class="content-box hidden">
+                  <h4>Conceitos Fundamentais:</h4>
+                  <p>O mercado financeiro é o ambiente onde ocorrem negociações de ativos financeiros. É dividido em:</p>
+                  <ul>
+                    <li>🏦 Mercado Monetário: Operações de curto prazo</li>
+                    <li>📈 Mercado de Capitais: Ações e títulos</li>
+                    <li>💱 Mercado Cambial: Moedas estrangeiras</li>
+                    <li>📊 Mercado de Crédito: Empréstimos e financiamentos</li>
+                  </ul>
+                  <div class="quiz-section">
+                    <h4>Quiz:</h4>
+                    <p>Onde são negociadas as ações de empresas?</p>
+                    <div class="quiz-options">
+                      <button onclick="checkAnswer(this, true)" class="quiz-btn">Mercado de Capitais</button>
+                      <button onclick="checkAnswer(this, false)" class="quiz-btn">Mercado Monetário</button>
+                      <button onclick="checkAnswer(this, false)" class="quiz-btn">Mercado Cambial</button>
+                    </div>
+                  </div>
+                  <button class="mark-complete" onclick="markComplete(this)">Marcar como Concluído</button>
+                </div>
+              </div>
+            </section>
+
+            <section class="section" data-section="2" style="display: none;">
+              <h3>2. Renda Fixa vs Renda Variável</h3>
+              <div class="interactive-box">
+                <button class="reveal-btn" onclick="toggleContent(this, 'tipos-renda')">
+                  Tipos de Investimentos
+                </button>
+                <div id="tipos-renda" class="content-box hidden">
+                  <h4>Renda Fixa:</h4>
+                  <ul>
+                    <li>💰 CDB: Certificados de Depósito Bancário</li>
+                    <li>📑 Tesouro Direto: Títulos públicos</li>
+                    <li>🏦 LCI/LCA: Letras de Crédito</li>
+                    <li>📋 Debêntures: Títulos de dívida corporativa</li>
+                  </ul>
+                  <h4>Renda Variável:</h4>
+                  <ul>
+                    <li>📊 Ações: Participação em empresas</li>
+                    <li>🏢 FIIs: Fundos Imobiliários</li>
+                    <li>🌐 ETFs: Fundos de Índice</li>
+                    <li>📈 BDRs: Recibos de ações internacionais</li>
+                  </ul>
+                  <div class="quiz-section">
+                    <h4>Quiz:</h4>
+                    <p>Qual investimento oferece retorno previsível?</p>
+                    <div class="quiz-options">
+                      <button onclick="checkAnswer(this, true)" class="quiz-btn">CDB</button>
+                      <button onclick="checkAnswer(this, false)" class="quiz-btn">Ações</button>
+                      <button onclick="checkAnswer(this, false)" class="quiz-btn">FIIs</button>
+                    </div>
+                  </div>
+                  <button class="mark-complete" onclick="markComplete(this)">Marcar como Concluído</button>
+                </div>
+              </div>
+            </section>
+
+            <section class="section" data-section="3" style="display: none;">
+              <h3>3. Análise de Investimentos</h3>
+              <div class="interactive-box">
+                <button class="reveal-btn" onclick="toggleContent(this, 'analise')">
+                  Como Analisar Investimentos
+                </button>
+                <div id="analise" class="content-box hidden">
+                  <h4>Principais Indicadores:</h4>
+                  <ul>
+                    <li>📊 Rentabilidade</li>
+                    <li>⚠️ Risco</li>
+                    <li>💰 Liquidez</li>
+                    <li>💵 Custos e taxas</li>
+                  </ul>
+                  <div class="tip-card">
+                    <h4>Dica Importante:</h4>
+                    <p>Não existe investimento perfeito! Cada tipo tem seus prós e contras.</p>
+                  </div>
+                  <div class="quiz-section">
+                    <h4>Quiz:</h4>
+                    <p>Qual fator mede a facilidade de resgate?</p>
+                    <div class="quiz-options">
+                      <button onclick="checkAnswer(this, true)" class="quiz-btn">Liquidez</button>
+                      <button onclick="checkAnswer(this, false)" class="quiz-btn">Rentabilidade</button>
+                      <button onclick="checkAnswer(this, false)" class="quiz-btn">Risco</button>
+                    </div>
+                  </div>
+                  <button class="mark-complete" onclick="markComplete(this)">Marcar como Concluído</button>
+                </div>
+              </div>
+            </section>
+
+            <section class="section" data-section="4" style="display: none;">
+              <h3>4. Estratégias de Investimento</h3>
+              <div class="interactive-box">
+                <button class="reveal-btn" onclick="toggleContent(this, 'estrategias')">
+                  Montando sua Carteira
+                </button>
+                <div id="estrategias" class="content-box hidden">
+                  <h4>Princípios Básicos:</h4>
+                  <ul>
+                    <li>🎯 Definição de objetivos</li>
+                    <li>⏰ Horizonte de tempo</li>
+                    <li>⚖️ Perfil de risco</li>
+                    <li>🔄 Diversificação</li>
+                  </ul>
+                  <div class="tip-card">
+                    <h4>Exemplo Prático:</h4>
+                    <p>Carteira Conservadora:</p>
+                    <ul>
+                      <li>70% Renda Fixa</li>
+                      <li>20% Fundos Multimercado</li>
+                      <li>10% Renda Variável</li>
+                    </ul>
+                  </div>
+                  <div class="quiz-section">
+                    <h4>Quiz:</h4>
+                    <p>Por que diversificar investimentos?</p>
+                    <div class="quiz-options">
+                      <button onclick="checkAnswer(this, true)" class="quiz-btn">Reduzir riscos</button>
+                      <button onclick="checkAnswer(this, false)" class="quiz-btn">Aumentar custos</button>
+                      <button onclick="checkAnswer(this, false)" class="quiz-btn">Complicar gestão</button>
+                    </div>
+                  </div>
+                  <button class="mark-complete" onclick="markComplete(this)">Marcar como Concluído</button>
+                </div>
+              </div>
+            </section>
+          </div>
+
+          <div class="module-navigation">
+            <button class="nav-btn prev" onclick="previousSection()" disabled>Anterior</button>
+            <button class="nav-btn next" onclick="nextSection()">Próximo</button>
+          </div>
+        </div>
+      `
+    },
+    savings: {
+      title: 'Técnicas de Economia',
+      content: `
+        <div class="interactive-module">
+          <div class="module-progress">
+            <div class="progress-bar">
+              <div class="progress" id="progress-bar"></div>
+            </div>
+            <p class="progress-text">0% Completo</p>
+          </div>
+          
+          <div class="module-sections">
+            <section class="section" data-section="1">
+              <h3>1. Orçamento Pessoal</h3>
+              <div class="interactive-box">
+                <button class="reveal-btn" onclick="toggleContent(this, 'orcamento')">
+                  Como Organizar suas Finanças
+                </button>
+                <div id="orcamento" class="content-box hidden">
+                  <h4>Método 50/30/20:</h4>
+                  <ul>
+                    <li>50% - Necessidades básicas</li>
+                    <li>30% - Desejos e lazer</li>
+                    <li>20% - Economia e investimentos</li>
+                  </ul>
+                  <div class="tip-card">
+                    <h4>Dicas para Implementação:</h4>
+                    <ul>
+                      <li>📱 Use apps de controle financeiro</li>
+                      <li>📊 Crie planilhas detalhadas</li>
+                      <li>📅 Estabeleça datas fixas para pagamentos</li>
+                      <li>💰 Separe as despesas por categorias</li>
+                    </ul>
+                  </div>
+                  <div class="quiz-section">
+                    <h4>Quiz Rápido:</h4>
+                    <p>Quanto deveria ser destinado às necessidades básicas?</p>
+                    <div class="quiz-options">
+                      <button onclick="checkAnswer(this, true)" class="quiz-btn">50%</button>
+                      <button onclick="checkAnswer(this, false)" class="quiz-btn">30%</button>
+                      <button onclick="checkAnswer(this, false)" class="quiz-btn">20%</button>
+                    </div>
+                  </div>
+                  <button class="mark-complete" onclick="markComplete(this)">Marcar como Concluído</button>
+                </div>
+              </div>
+            </section>
+
+            <section class="section" data-section="2" style="display: none;">
+              <h3>2. Estratégias de Economia</h3>
+              <div class="interactive-box">
+                <button class="reveal-btn" onclick="toggleContent(this, 'estrategias-economia')">
+                  Dicas Práticas de Economia
+                </button>
+                <div id="estrategias-economia" class="content-box hidden">
+                  <h4>No Dia a Dia:</h4>
+                  <ul>
+                    <li>📝 Faça lista de compras</li>
+                    <li>🏦 Automatize suas economias</li>
+                    <li>💳 Evite parcelamentos</li>
+                    <li>📊 Acompanhe seus gastos</li>
+                  </ul>
+                  <div class="tip-card">
+                    <h4>Economia nas Compras:</h4>
+                    <ul>
+                      <li>🛒 Compare preços online</li>
+                      <li>🏷️ Use cupons e cashback</li>
+                      <li>📆 Aproveite promoções sazonais</li>
+                      <li>🔍 Pesquise antes de comprar</li>
+                    </ul>
+                  </div>
+                  <div class="quiz-section">
+                    <h4>Quiz:</h4>
+                    <p>Qual a melhor estratégia para economizar nas compras?</p>
+                    <div class="quiz-options">
+                      <button onclick="checkAnswer(this, true)" class="quiz-btn">Fazer lista de compras</button>
+                      <button onclick="checkAnswer(this, false)" class="quiz-btn">Comprar por impulso</button>
+                      <button onclick="checkAnswer(this, false)" class="quiz-btn">Parcelar tudo</button>
+                    </div>
+                  </div>
+                  <button class="mark-complete" onclick="markComplete(this)">Marcar como Concluído</button>
+                </div>
+              </div>
+            </section>
+
+            <section class="section" data-section="3" style="display: none;">
+              <h3>3. Economia Digital</h3>
+              <div class="interactive-box">
+                <button class="reveal-btn" onclick="toggleContent(this, 'economia-digital')">
+                  Ferramentas Digitais para Economia
+                </button>
+                <div id="economia-digital" class="content-box hidden">
+                  <h4>Apps e Serviços Úteis:</h4>
+                  <ul>
+                    <li>📱 Apps de controle financeiro</li>
+                    <li>💰 Carteiras digitais</li>
+                    <li>🔄 Sistemas de cashback</li>
+                    <li>💳 Cartões sem anuidade</li>
+                  </ul>
+                  <div class="tip-card">
+                    <h4>Dicas de Segurança:</h4>
+                    <ul>
+                      <li>🔒 Use senhas fortes</li>
+                      <li>⚠️ Evite redes públicas</li>
+                      <li>🔍 Verifique sites seguros</li>
+                      <li>📱 Ative autenticação em dois fatores</li>
+                    </ul>
+                  </div>
+                  <div class="quiz-section">
+                    <h4>Quiz:</h4>
+                    <p>Qual ferramenta ajuda a recuperar dinheiro em compras?</p>
+                    <div class="quiz-options">
+                      <button onclick="checkAnswer(this, true)" class="quiz-btn">Cashback</button>
+                      <button onclick="checkAnswer(this, false)" class="quiz-btn">Cartão de crédito</button>
+                      <button onclick="checkAnswer(this, false)" class="quiz-btn">Boleto bancário</button>
+                    </div>
+                  </div>
+                  <button class="mark-complete" onclick="markComplete(this)">Marcar como Concluído</button>
+                </div>
+              </div>
+            </section>
+
+            <section class="section" data-section="4" style="display: none;">
+              <h3>4. Hábitos Financeiros</h3>
+              <div class="interactive-box">
+                <button class="reveal-btn" onclick="toggleContent(this, 'habitos-financeiros')">
+                  Construindo Bons Hábitos
+                </button>
+                <div id="habitos-financeiros" class="content-box hidden">
+                  <h4>Hábitos Essenciais:</h4>
+                  <ul>
+                    <li>📊 Registro diário de gastos</li>
+                    <li>💰 Poupança automática</li>
+                    <li>🎯 Metas financeiras claras</li>
+                    <li>📝 Revisão mensal do orçamento</li>
+                  </ul>
+                  <div class="tip-card">
+                    <h4>Comportamentos a Evitar:</h4>
+                    <ul>
+                      <li>❌ Compras por impulso</li>
+                      <li>❌ Dívidas desnecessárias</li>
+                      <li>❌ Gastos sem planejamento</li>
+                      <li>❌ Descontrole no cartão de crédito</li>
+                    </ul>
+                  </div>
+                  <div class="quiz-section">
+                    <h4>Quiz:</h4>
+                    <p>Qual é o melhor hábito financeiro?</p>
+                    <div class="quiz-options">
+                      <button onclick="checkAnswer(this, true)" class="quiz-btn">Registrar gastos diariamente</button>
+                      <button onclick="checkAnswer(this, false)" class="quiz-btn">Gastar sem planejar</button>
+                      <button onclick="checkAnswer(this, false)" class="quiz-btn">Ignorar o orçamento</button>
+                    </div>
+                  </div>
+                  <button class="mark-complete" onclick="markComplete(this)">Marcar como Concluído</button>
+                </div>
+              </div>
+            </section>
+          </div>
+
+          <div class="module-navigation">
+            <button class="nav-btn prev" onclick="previousSection()" disabled>Anterior</button>
+            <button class="nav-btn next" onclick="nextSection()">Próximo</button>
+          </div>
+        </div>
+      `
+    }
+  };
+
+  const moduleContent = document.getElementById('module-content');
+  if (!content[type]) {
+    console.error('Módulo não encontrado:', type);
+    return;
+  }
+  
+  moduleContent.style.display = 'block';
+  moduleContent.innerHTML = content[type].content;
+  initializeModule();
+}
+
+function checkAnswer(btn, isCorrect) {
+  const options = btn.parentElement.querySelectorAll('.quiz-btn');
+  options.forEach(option => {
+    option.disabled = true;
+    option.classList.remove('correct', 'incorrect');
+  });
+  
+  if (isCorrect) {
+    btn.classList.add('correct');
+    btn.textContent += ' ✓';
+  } else {
+    btn.classList.add('incorrect');
+    btn.textContent += ' ✗';
+    
+    options.forEach(option => {
+      if (option !== btn && option.onclick.toString().includes('true')) {
+        option.classList.add('correct');
+        option.textContent += ' ✓';
+      }
+    });
+  }
+  
+  updateProgress();
+}
+
+function initializeModule() {
+  const progress = {
+    currentSection: 1,
+    totalSections: document.querySelectorAll('.section').length,
+    completedItems: new Set()
+  };
+  
+  window.moduleProgress = progress;
+  updateNavButtons();
+}
+
+function toggleContent(btn, contentId) {
+  const content = document.getElementById(contentId);
+  content.classList.toggle('hidden');
+  btn.classList.toggle('active');
+  updateProgress();
+}
+
+function markComplete(btn) {
+  const section = btn.closest('.section');
+  const contentBox = btn.closest('.content-box');
+  
+  if (!window.moduleProgress.completedItems.has(contentBox.id)) {
+    window.moduleProgress.completedItems.add(contentBox.id);
+    btn.textContent = "Concluído ✓";
+    btn.disabled = true;
+    updateProgress();
+  }
+}
+
+function updateProgress() {
+  const totalItems = document.querySelectorAll('.content-box').length;
+  const completedItems = window.moduleProgress.completedItems.size;
+  const percentage = Math.round((completedItems / totalItems) * 100);
+  
+  const progressBar = document.querySelector('.progress');
+  const progressText = document.querySelector('.progress-text');
+  
+  progressBar.style.width = `${percentage}%`;
+  progressText.textContent = `${percentage}% Completo`;
+  
+  if (percentage >= 100) {
+    showCompletionMessage();
+  }
+}
+
+function nextSection() {
+  const currentSection = document.querySelector(`.section[data-section="${window.moduleProgress.currentSection}"]`);
+  const nextSection = document.querySelector(`.section[data-section="${window.moduleProgress.currentSection + 1}"]`);
+  
+  if (nextSection) {
+    currentSection.style.display = 'none';
+    nextSection.style.display = 'block';
+    window.moduleProgress.currentSection++;
+    updateNavButtons();
+  }
+}
+
+function previousSection() {
+  const currentSection = document.querySelector(`.section[data-section="${window.moduleProgress.currentSection}"]`);
+  const prevSection = document.querySelector(`.section[data-section="${window.moduleProgress.currentSection - 1}"]`);
+  
+  if (prevSection) {
+    currentSection.style.display = 'none';
+    prevSection.style.display = 'block';
+    window.moduleProgress.currentSection--;
+    updateNavButtons();
+  }
+}
+
+function updateNavButtons() {
+  const prevBtn = document.querySelector('.nav-btn.prev');
+  const nextBtn = document.querySelector('.nav-btn.next');
+  
+  prevBtn.disabled = window.moduleProgress.currentSection === 1;
+  nextBtn.disabled = window.moduleProgress.currentSection === window.moduleProgress.totalSections;
+}
+
+function showCompletionMessage() {
+  const moduleContent = document.querySelector('.module-sections');
+  moduleContent.innerHTML += `
+    <div class="completion-message animate">
+      <h3>🎉 Parabéns!</h3>
+      <p>Você completou este módulo com sucesso!</p>
+      <button onclick="resetModule()" class="reset-btn">Recomeçar Módulo</button>
+    </div>
+  `;
+}
+
+function showCalculator(type) {
+  const container = document.getElementById('calculator-container');
+  
+  const calculators = {
+    compound: `
+      <div class="calculator-form">
+        <h4>Calculadora de Juros Compostos</h4>
+        <input type="number" id="principal" placeholder="Valor inicial">
+        <input type="number" id="rate" placeholder="Taxa de juros anual (%)">
+        <input type="number" id="time" placeholder="Tempo (anos)">
+        <button onclick="calculateCompoundInterest()">Calcular</button>
+        <div id="compound-result"></div>
+      </div>
+    `,
+    retirement: `
+      <div class="calculator-form">
+        <h4>Calculadora de Aposentadoria</h4>
+        <input type="number" id="current-age" placeholder="Idade atual">
+        <input type="number" id="retirement-age" placeholder="Idade de aposentadoria">
+        <input type="number" id="monthly-save" placeholder="Economia mensal">
+        <input type="number" id="expected-return" placeholder="Retorno anual esperado (%)">
+        <button onclick="calculateRetirement()">Calcular</button>
+        <div id="retirement-result"></div>
+      </div>
+    `,
+    savings: `
+      <div class="calculator-form">
+        <h4>Calculadora de Poupança</h4>
+        <input type="number" id="monthly-amount" placeholder="Valor mensal">
+        <input type="number" id="savings-goal" placeholder="Objetivo de poupança">
+        <input type="number" id="savings-rate" placeholder="Taxa de juros anual (%)">
+        <button onclick="calculateSavings()">Calcular</button>
+        <div id="savings-result"></div>
+      </div>
+    `
+  };
+  
+  container.innerHTML = calculators[type] || '';
+}
+
+function calculateCompoundInterest() {
+  const p = Number(document.getElementById('principal').value);
+  const r = Number(document.getElementById('rate').value) / 100;
+  const t = Number(document.getElementById('time').value);
+  
+  const amount = p * Math.pow(1 + r, t);
+  const interest = amount - p;
+  
+  document.getElementById('compound-result').innerHTML = `
+    <p>Montante final: R$ ${amount.toFixed(2)}</p>
+    <p>Juros ganhos: R$ ${interest.toFixed(2)}</p>
+  `;
+}
+
+function calculateRetirement() {
+  const currentAge = Number(document.getElementById('current-age').value);
+  const retirementAge = Number(document.getElementById('retirement-age').value);
+  const monthlySave = Number(document.getElementById('monthly-save').value);
+  const expectedReturn = Number(document.getElementById('expected-return').value) / 100;
+  
+  const years = retirementAge - currentAge;
+  const months = years * 12;
+  let total = 0;
+  
+  for(let i = 0; i < months; i++) {
+    total += monthlySave;
+    total *= (1 + expectedReturn/12);
+  }
+  
+  document.getElementById('retirement-result').innerHTML = `
+    <p>Aos ${retirementAge} anos você terá acumulado:</p>
+    <p>R$ ${total.toFixed(2)}</p>
+  `;
+}
+
+function calculateSavings() {
+  const monthlyAmount = Number(document.getElementById('monthly-amount').value);
+  const goal = Number(document.getElementById('savings-goal').value);
+  const rate = Number(document.getElementById('savings-rate').value) / 100;
+  
+  let months = 0;
+  let total = 0;
+  
+  while(total < goal) {
+    total += monthlyAmount;
+    total *= (1 + rate/12);
+    months++;
+  }
+  
+  const years = Math.floor(months/12);
+  const remainingMonths = months % 12;
+  
+  document.getElementById('savings-result').innerHTML = `
+    <p>Para atingir R$ ${goal.toFixed(2)}:</p>
+    <p>Tempo necessário: ${years} anos e ${remainingMonths} meses</p>
+  `;
+}
+
+function resetModule() {
+  const moduleContent = document.getElementById('module-content');
+  moduleContent.style.display = 'none';
+  window.moduleProgress.completedItems.clear();
+  initializeModule();
+  alert("Módulo reiniciado. Boa sorte!");
+}
+</script>
+</body></html>
